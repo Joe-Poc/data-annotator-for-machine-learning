@@ -185,7 +185,7 @@ export class AnnotatePage extends CommonPage {
   async inputNumericLable() {
     await FunctionUtil.elementVisibilityOf(this.NUMERIC_LABEL_INPUT);
     await browser.waitForAngularEnabled(false);
-    await this.NUMERIC_LABEL_INPUT.sendKeys(50);
+    await this.NUMERIC_LABEL_INPUT.sendKeys(5);
     await FunctionUtil.pressEnter();
   }
 
