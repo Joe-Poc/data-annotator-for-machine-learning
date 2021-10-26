@@ -41,7 +41,7 @@ describe("verify generate-download-share funtion", () => {
 
     it("Download project.", async (done) => {
       await downloadSharePage.clickdownloadProject();
-      await downloadSharePage.downloadPrject();
+      await downloadSharePage.clickGenerateNewDataset();
       expect(
         await downloadSharePage.verifyDownloadFileExisted(filename, dirPath)
       ).toBe(true);
@@ -90,7 +90,7 @@ describe("verify generate-download-share funtion", () => {
 
     it("Download project", async (done) => {
       await downloadSharePage.clickdownloadProject();
-      await downloadSharePage.downloadPrject();
+      await downloadSharePage.clickGenerateNewDataset();
       expect(
         await downloadSharePage.verifyDownloadFileExisted(filename, dirPath)
       ).toBe(true);
@@ -100,6 +100,7 @@ describe("verify generate-download-share funtion", () => {
     it("Download numberic project", async (done) => {
       await commonPage.filterProjectName(Constant.project_name_tabular_numeric);
       await downloadSharePage.clickdownloadProject();
+      await downloadSharePage.clickGenerateNewDataset();
       expect(
         await downloadSharePage.verifyDownloadFileExisted(filename, dirPath)
       ).toBe(true);
