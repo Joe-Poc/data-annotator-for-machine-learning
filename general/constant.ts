@@ -7,6 +7,7 @@ export let Constant = {
   login: false,
   project_name: "e2e Test Project",
   project_name_text_al: "",
+  project_name_numberic_mutiple: "",
   project_name_text_multiple: "",
   project_name_tabular_numeric: "",
   project_name_tabular_al: "",

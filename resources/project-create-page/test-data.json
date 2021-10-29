@@ -77,5 +77,22 @@
     "secondStart": { "x": 50, "y": 30 },
     "secondEnd": { "x": 60, "y": 40 },
     "deletePosition": { "x": 35, "y": 35 }
+  },
+  "TextMutilNumbericProject": {
+    "Instruction": "this is e2e test mutil numberic project task instruction",
+    "Annotator": "poc-os@poc-os.com",
+    "Annotator2": "test2@vmware.com",
+    "Label": "label-test",
+    "MinVal": 1,
+    "MaxVal": 10,
+    "sliderValue": 4,
+    "Source": "text-mutilNumberic-data.csv",
+    "ticketSessions": 52,
+    "assignedTickets": 10,
+    "duplicateLabelColumn": "Description",
+    "categoryLabelColumn": "GSS_Problem_Category__c",
+    "labelColumn": "No Labels",
+    "maxAnnotation": 3,
+    "defaultEvenlyDistributedTickets": 26
   }
 }

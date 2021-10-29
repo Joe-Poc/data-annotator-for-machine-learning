@@ -35,6 +35,8 @@ export class EditPage {
   NUMERIC_MIN_LABEL_INPUT = element(by.css("input[id=min]"));
   NUMERIC_MAX_LABEL_INPUT = element(by.css("input[id=max]"));
   OWNER_DELETE_ICON = element(by.css("ul li:last-child clr-icon"));
+  ADD_BTN = element(by.css(".btn.btn-icon.add-btn"));
+  MUTIL_LABEL_INPUT = element(by.css("div[formarrayname=mutilLabelArray] input[id=multiLabels]"));
 
   async navigateTo() {
     await FunctionUtil.elementVisibilityOf(this.ADMIN_TAB);
@@ -253,5 +255,76 @@ export class EditPage {
       ExpectedConditions.invisibilityOf($(".btn.uploadLoading")),
       Constant.DEFAULT_TIME_OUT
     );
+  }
+
+  async addMutilNumbericLabel(labels: any, min, max) {
+    await FunctionUtil.elementVisibilityOf(this.ADD_BTN);
+    for (let i= 0; i < labels.length; i++) {
+      await this.ADD_BTN.click();
+    }
+    await this.setMutilNumericLabel(labels, min, max);
+  }
+
+  async setMutilNumericLabel(label, min, max) {
+    console.log("start to setMutilNumericLabel...", label);
+    await FunctionUtil.elementVisibilityOf(this.MUTIL_LABEL_INPUT);
+    element.all(by.css("div[formarrayname=mutilLabelArray] input[id=multiLabels]")).each(async function(element, index) {
+      if (index > 1) {
+        await element.sendKeys(label[index - 2]);
+      }
+    });
+    element.all(by.css("div[formarrayname=mutilLabelArray] input[formcontrolname=minMutilVal]")).each(async function(element, index) {
+      if (index > 1) {
+        await element.sendKeys(min);
+      }
+    });
+    element.all(by.css("div[formarrayname=mutilLabelArray] input[formcontrolname=maxMutilVal]")).each(async function(element, index) {
+      if (index > 1) {
+        await element.sendKeys(max);
+      }
+    });
+    await browser.waitForAngularEnabled(false);
+    console.log("succeed to setMutilNumericLabel...");
+  }
+
+  async editMutilNumbericThreshold(min, max) {
+    console.log("start to editMutilNumbericThreshold...");
+    await FunctionUtil.elementVisibilityOf(this.MUTIL_LABEL_INPUT);
+    element.all(by.css("div[formarrayname=mutilLabelArray] input[formcontrolname=minMutilVal]")).each(async function(element, index) {
+      if (index === 0) {
+        await element.clear();
+        await element.sendKeys(min);
+      }
+    });
+    element.all(by.css("div[formarrayname=mutilLabelArray] input[formcontrolname=maxMutilVal]")).each(async function(element, index) {
+      if (index === 0) {
+        await element.clear();
+        await element.sendKeys(max);
+      }
+    });
+    await browser.waitForAngularEnabled(false);
+    console.log("succeed to editMutilNumbericThreshold...");
+  }
+
+  async editMutilNumbericLabel(label) {
+    console.log("start to editMutilNumbericThreshold...");
+    await FunctionUtil.elementVisibilityOf(this.MUTIL_LABEL_INPUT);
+    element.all(by.css("div[formarrayname=mutilLabelArray] input[id=multiLabels]")).each(async function(element, index) {
+      if (index === 0) {
+        await element.clear();
+        await element.sendKeys(label);
+      }
+    });
+  }
+
+  async deltMutilNumbericLabel(delIndex: number) {
+    console.log("start to deltMutilNumbericLabel...");
+    element.all(by.css("div[formarrayname=mutilLabelArray] clr-icon[shape=times]")).each(async function(element, index) {
+      if (index === delIndex) {
+        await element.click();
+      }
+    });
+    await browser.sleep(2000);
+    console.log("succeed to deltMutilNumbericLabel...");
   }
 }
