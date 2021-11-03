@@ -1,8 +1,6 @@
 {
   "TextProject": {
     "Instruction": "this is e2e test text project task instruction",
-    "Annotator": "poc-os@poc-os.com",
-    "Annotator2": "test2@vmware.com",
     "Labels": "test1,test2",
     "Source": "text-test-data.csv",
     "ticketSessions": 52,
@@ -17,7 +15,6 @@
   },
   "TextMultipleLabelsProject": {
     "Instruction": "this is e2e test multiple labels project task instruction",
-    "Annotator": "poc-os@poc-os.com",
     "Labels": "test1,test2",
     "Source": "text-test-data.csv",
     "ticketSessions": 52,
@@ -25,7 +22,6 @@
   },
   "TabularNumericLabelsProject": {
     "Instruction": "this is e2e test tabular numeric labels project task instruction",
-    "Annotator": "poc-os@poc-os.com",
     "MinLabel": 1,
     "MaxLabel": 100,
     "Source": "text-test-data.csv",
@@ -35,7 +31,6 @@
 
   "TabularProject": {
     "Instruction": "this is e2e test tabular project task instruction",
-    "Annotator": "poc-os@poc-os.com",
     "Labels": "test1,test2",
     "Source": "text-test-data.csv",
     "ticketSessions": 52,
@@ -45,7 +40,6 @@
 
   "NerLabelsExistingProject": {
     "Instruction": "this is e2e test ner labels existing project task instruction",
-    "Annotator": "poc-os@poc-os.com",
     "existingLabels": "label1",
     "Labels": "test1",
     "Source": "ner-test-data.csv",
@@ -55,7 +49,6 @@
   },
   "LogProject": {
     "Instruction": "this is e2e test log project task instruction",
-    "Annotator": "poc-os@poc-os.com",
     "Labels": "test1,test2",
     "Source": "log-test-data.tgz",
     "ticketSessions": 10,
@@ -68,7 +61,6 @@
   },
   "ImageProject": {
     "Instruction": "this is e2e test image project task instruction",
-    "Annotator": "poc-os@poc-os.com",
     "Labels": "test1,test2",
     "Source": "image-test-data.zip",
     "ticketSessions": 5,
@@ -80,8 +72,6 @@
   },
   "TextMutilNumbericProject": {
     "Instruction": "this is e2e test mutil numberic project task instruction",
-    "Annotator": "poc-os@poc-os.com",
-    "Annotator2": "test2@vmware.com",
     "Label": "label-test",
     "MinVal": 1,
     "MaxVal": 10,

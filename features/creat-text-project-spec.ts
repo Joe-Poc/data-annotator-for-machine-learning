@@ -101,10 +101,10 @@ describe("Create new project ", () => {
     await newProjectPage.selectActiveLearningModel(0);
     await newProjectPage.setAssignee(
       Constant.username,
-      projectCreateData.TextProject.Annotator2
+      Constant.username2
     );
     await newProjectPage.setDuplicateAnnotator(
-      projectCreateData.TextProject.Annotator
+      Constant.username
     );
     await newProjectPage.setAssignedTicket(
       projectCreateData.TextProject.assignedTickets

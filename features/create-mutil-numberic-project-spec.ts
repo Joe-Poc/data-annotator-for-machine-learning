@@ -79,11 +79,11 @@ describe("Create new project ", () => {
     console.log('start1 to setAssignee annotator');
     await newProjectPage.setAssignee(
       Constant.username,
-      projectCreateData.TextMutilNumbericProject.Annotator2
+      Constant.username2
     );
     console.log('succeed1 to setAssignee annotator');
     await newProjectPage.setDuplicateAnnotator(
-      projectCreateData.TextMutilNumbericProject.Annotator
+      Constant.username
     );
     await newProjectPage.setAssignedTicket(
       projectCreateData.TextMutilNumbericProject.assignedTickets

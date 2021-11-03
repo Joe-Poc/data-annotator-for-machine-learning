@@ -46,10 +46,13 @@ var conf = {
     "./features/delete-datasets-spec.ts",
   ],
 
-  specsConst: [
+  specsConstOut: [
     "./general/sign-up-external-spec.ts",
     "./general/logout-spec.ts",
     "./general/login-external-spec.ts",
+  ],
+  specsConstIn:[
+    "./general/login-spec.ts",
   ],
 
   poc_specs: [
@@ -62,7 +65,7 @@ var conf = {
 exports.config = {
   allScriptsTimeout: 20000, //first page loading time
   // specs: conf.poc_specs,
-  specs: conf.specsConst.concat(conf.ci_specs),
+  specs: process.env.IN? conf.specsConstIn.concat(conf.ci_specs): conf.specsConstOut.concat(conf.ci_specs),
   capabilities: {
     browserName: "chrome",
     chromeOptions: {
@@ -73,7 +76,7 @@ exports.config = {
         "ignore-certificate-errors",
         "ignore-ssl-errors",
         "no-sandbox",
-        "headless",
+        // "headless",
       ],
       prefs: {
         download: {
@@ -85,7 +88,7 @@ exports.config = {
     },
   },
   directConnect: true,
-  baseUrl: "http://localhost:4200/",
+  baseUrl: process.env.BASE_URL || "http://localhost:4200/",
   framework: "jasmine",
   jasmineNodeOpts: {
     showColors: true,
