@@ -84,6 +84,7 @@ export class AnnotatePage extends CommonPage {
     by.css("clr-radio-wrapper label[for='sequential']")
   );
   LOG_SECOND_LABEL = element(by.buttonText("test2"));
+  MULTIPLE_SLIDERS = element.all(by.css(".labelCheckbox ngx-slider"));
 
   async navigateTo() {
     await browser.sleep(5000);
@@ -462,5 +463,21 @@ export class AnnotatePage extends CommonPage {
     await FunctionUtil.elementVisibilityOf(this.HISTORY_LISTS.first());
     await this.HISTORY_LISTS.first().click();
     await browser.waitForAngularEnabled(false);
+  }
+
+  async selectMultipleNumbericLable(sliderValue) {
+    this.MULTIPLE_LABELS.then(async (labels) => {
+      labels.forEach(async (element) => {
+        await element.click();
+      });
+    });
+    this.MULTIPLE_SLIDERS.then(async (sliders) => {
+      sliders.forEach(async (slider) => {
+        await browser.actions().dragAndDrop(slider, { x: sliderValue, y: 0 }).perform(); 
+      });
+    });
+    await browser.waitForAngularEnabled(false);
+    await browser.sleep(1000);
+    await this.ANNOTATE_SUBMIT_BTN.click();
   }
 }

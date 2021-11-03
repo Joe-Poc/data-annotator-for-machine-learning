@@ -29,5 +29,23 @@
     "Min_Validation": 2,
     "Max_Validation": 99,
     "Labels": "0--200"
+  },
+
+  "MutilNumbericProject": {
+    "Email_Validation": "test2@@@@qq.com",
+    "Owner2": "test2@vmware.com",
+    "Owner3": "test3@vmware.com",
+    "Annotator": "test2@vmware.com,test3@vmware.com,test4@vmware.com,test5@vmware.com,test6@vmware.com",
+    "Labels": "label-test4, label-test5",
+    "MinVal": 1,
+    "MaxVal": 10,
+    "editMinVal_Err": 2,
+    "editMaxVal_Err": 9,
+    "editMinVal": 0,
+    "editMaxVal": 10,
+    "editLabel": "label-test01",
+    "delIndex_err": 0,
+    "delIndex": 3,
+    "after_edited_labels": "label-test3,label-test01,label-test4"
   }
 }

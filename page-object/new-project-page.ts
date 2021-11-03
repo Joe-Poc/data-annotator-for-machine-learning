@@ -60,11 +60,14 @@ export class NewProjectPage extends CommonPage {
   ALLOW_MULTIPLE = element(by.css(".labelsList label[for=multipleLabel]"));
   TICKET_COLUMNS = element.all(by.css("clr-dg-row label"));
   NUMERIC_OPTION = element(by.css("clr-radio-wrapper label[for=numericLabel]"));
+  MUTIL_NUMERIC_OPTION = element(by.css("clr-radio-wrapper label[for=mutilNumericLabel]"));
   TEXT_LABEL_TYPE_OPTION = element(
     by.css("clr-radio-wrapper label[for=textLabel]")
   );
   MIN_LABEL_INPUT = element(by.css("input[formcontrolname=min]"));
   MAX_LABEL_INPUT = element(by.css("input[formcontrolname=max]"));
+  MUTIL_LABEL_INPUT = element(by.css("div[formarrayname=mutilLabelArray] input[id=multiLabels]"));
+  ADD_BTN = element(by.css(".add-btn"));
   SHOW_FILENAME_CHECKBOX = element(by.css("label[for=isShowFilename]"));
   IMAGE_LOADING = element(by.css("span .loadingSpan"));
   ASSIGN_TICKET_INPUT = element(
@@ -310,12 +313,14 @@ export class NewProjectPage extends CommonPage {
   }
 
   setAssignee(lable: string, annotator2?) {
+    console.log('start to setAssignee annotator');
     return browser
       .wait(
         ExpectedConditions.visibilityOf(this.ASSIGNEE),
         Constant.DEFAULT_TIME_OUT
       )
       .then(async () => {
+        console.log('succeed to visibilityOf annotator');
         await this.ASSIGNEE.clear();
         await this.ASSIGNEE.sendKeys(Constant.username);
         await FunctionUtil.pressEnter();
@@ -394,4 +399,40 @@ export class NewProjectPage extends CommonPage {
     await browser.waitForAngularEnabled(false);
     console.log("succeed to deleteAnnotator...");
   }
+
+  async addMutilNumericLabel(label, min, max) {
+    await this.MUTIL_NUMERIC_OPTION.click();
+    await FunctionUtil.elementVisibilityOf(this.ADD_BTN);
+    for (let i= 0; i < 2; i++) {
+      await this.ADD_BTN.click();
+    }
+    await this.setMutilNumericLabel(label, min, max);
+  }
+
+  async delMutilNumericLabel() {
+    console.log("start to delete MutilNumericLabel...");
+    element.all(by.css("div[formarrayname=mutilLabelArray] clr-icon[shape=times]")).each(async function(element, index) {
+      if (index < 2) {
+        await element.click();
+      }
+    });
+    console.log("succeed to delete MutilNumericLabel...");
+  }
+
+  async setMutilNumericLabel(label, min, max) {
+    console.log("start to setMutilNumericLabel...");
+    await FunctionUtil.elementVisibilityOf(this.MUTIL_LABEL_INPUT);
+    element.all(by.css("div[formarrayname=mutilLabelArray] input[id=multiLabels]")).each(async function(element, index) {
+      await element.sendKeys(label + index);
+    });
+    element.all(by.css("div[formarrayname=mutilLabelArray] input[formcontrolname=minMutilVal]")).each(async function(element) {
+      await element.sendKeys(min);
+    });
+    element.all(by.css("div[formarrayname=mutilLabelArray] input[formcontrolname=maxMutilVal]")).each(async function(element) {
+      await element.sendKeys(max);
+    });
+    await browser.waitForAngularEnabled(false);
+    console.log("succeed to setMutilNumericLabel...");
+  }
+
 }
