@@ -76,7 +76,7 @@ exports.config = {
         "ignore-certificate-errors",
         "ignore-ssl-errors",
         "no-sandbox",
-        // "headless",
+        "headless",
       ],
       prefs: {
         download: {
