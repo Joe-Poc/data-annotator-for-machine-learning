@@ -88,7 +88,7 @@ exports.config = {
     },
   },
   directConnect: true,
-  baseUrl: process.env.BASE_URL || "http://localhost:4200/",
+  baseUrl: process.env.IN? process.env.BASE_URL: "http://localhost:4200/",
   framework: "jasmine",
   jasmineNodeOpts: {
     showColors: true,
