@@ -80,6 +80,7 @@ describe("annotate project ...", () => {
       console.log("flag success....");
       await annotatePage.selectProjects(Constant.project_name_log);
       await annotatePage.waitForPageLoading();
+      browser.sleep(1000);
       await annotatePage.exitAnnotatePage();
       await commonPage.waitForGridLoading();
       done();

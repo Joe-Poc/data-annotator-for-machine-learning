@@ -40,11 +40,14 @@ describe("Enter projects tab...", () => {
   it("Should preview text al project, user and category charts should display normally.", async (done) => {
     project_name = Constant.project_name_text_al;
     await projectsPage.navigateTo();
+    console.log("filter project: projectsPage.navigateTo", project_name);
     await projectsPage.waitForGridLoading();
+    console.log("filter project: projectsPage.waitForGridLoading", project_name);
     await projectsPage.filterProjectName(project_name);
+    console.log("filter project: projectsPage.filterProjectName", project_name);
     let Project_Count_After_Filter = await projectsPage.getTableLength();
-    let Project_Name_Text = await projectsPage.getCellText(0);
     console.log("Project_Count_After_Filter:::", Project_Count_After_Filter);
+    let Project_Name_Text = await projectsPage.getCellText(0);
     console.log("Project_Name_Text:::", Project_Name_Text);
     if (Project_Name_Text !== "" || Project_Count_After_Filter > 0) {
       await commonPage.toShowMoreAnnotators();

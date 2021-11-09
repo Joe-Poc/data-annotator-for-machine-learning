@@ -99,7 +99,7 @@ export class CommonAppend {
 
   async locateProjectAppend(project_name){
     await FunctionUtil.click(this.COMMUNITY_DATASETS_TAB);
-    await this.commonPage.waitForPageLoading();
+    await this.commonPage.waitForGridLoading();
     await this.commonPage.filterProjectName(project_name);
 
     await FunctionUtil.click(this.APPEND_BTN);

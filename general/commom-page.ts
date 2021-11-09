@@ -29,9 +29,7 @@ export class CommonPage {
     by.css("input.filenameFilter[placeholder='Enter value here']")
   );
   PROJECT_NAME_FILTER_INPUT = $('.datagrid-filter input[name="search"]');
-  CLOSE_FILTER_BTN = $(
-    '.datagrid-filter.clr-popover-content clr-icon[shape="close"]'
-  );
+  CLOSE_FILTER_BTN = $('.datagrid-filter clr-icon[shape="close"]');
   Table_LISTS = $$(".datagrid-host .datagrid-scrolling-cells");
   FIRST_ROW_CELLS = $$(
     '.datagrid-host .datagrid-row:nth-child(2) clr-dg-cell[role="gridcell"]'

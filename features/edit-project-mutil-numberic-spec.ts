@@ -81,7 +81,7 @@ describe("edit multil numberic project info on projects page..", () => {
       await editPage.deleteProjectOwner(projectEditData.MutilNumbericProject.Owner3);
       await editPage.editProjectAnnotator(
         projectEditData.MutilNumbericProject.Email_Validation,
-        Constant.username
+        projectEditData.MutilNumbericProject.Annotator
       );
       await editPage.addMutilNumbericLabel(New_Lables, MIN_VAL, MAX_VAL);
       await editPage.editMutilNumbericThreshold(
