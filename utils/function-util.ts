@@ -10,7 +10,7 @@ import {
 } from "protractor";
 
 export class FunctionUtil {
-  private static DEFAULT_TIME_OUT = 200 * 1000;
+  private static DEFAULT_TIME_OUT = 60 * 1000;
 
   public static async selectFromListByIndex(
     ele: ElementFinder,

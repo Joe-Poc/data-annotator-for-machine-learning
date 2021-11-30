@@ -14,7 +14,16 @@ export class LoginBussiness {
       this.page.navigateTo();
     });
   }
-
+  
+  async loginWithMyVM(username, password){
+    await this.page.setUsername(username);
+    await this.page.setPassword(password);
+    await this.page.clickSingnInBtn();
+    await this.page.verifyLoggedUserNameDisplayed();
+    await expect(await this.page.getLoggedUserName()).toBe(username);
+    Constant.login = true;
+  }
+  
   login(username, password) {
     return this.page
       .setUsername(username)

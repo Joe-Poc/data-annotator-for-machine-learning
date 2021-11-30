@@ -83,7 +83,7 @@ describe("edit project info on projects page..", () => {
       await editPage.deleteProjectOwner(projectEditData.TextProject.Owner3);
       await editPage.editProjectAnnotator(
         projectEditData.TextProject.Email_Validation,
-        Constant.username
+        projectEditData.TextProject.Annotator
       );
       await editPage.addLabel(New_Lable);
       await editPage.editALProjectThreshold(
@@ -180,7 +180,7 @@ describe("edit project info on projects page..", () => {
       console.log("----------start to edit projects----------");
       await editPage.clickEditButton();
       await editPage.editAssignedTickets(
-        Constant.username,
+        projectEditData.LogProject.Annotator,
         projectEditData.LogProject.OverMax
       );
       await editPage.deleteAnnotator();

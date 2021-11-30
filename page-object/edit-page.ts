@@ -88,6 +88,8 @@ export class EditPage {
     await this.PROJECT_OWNER_INPUT.clear();
     await this.PROJECT_OWNER_INPUT.sendKeys(owner2);
     await FunctionUtil.pressEnter();
+    await browser.sleep(1000);
+    await this.PROJECT_OWNER_INPUT.clear();
     await this.PROJECT_OWNER_INPUT.sendKeys(owner3);
     await FunctionUtil.pressEnter();
     await browser.waitForAngularEnabled(false);
