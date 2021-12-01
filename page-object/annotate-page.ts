@@ -30,10 +30,10 @@ export class AnnotatePage extends CommonPage {
   SKIP_BTN = element(by.css("button.btn.btn-outline clr-icon[shape=ban]"));
   NER_SELECTED_LABEL = element(by.css("button.btn.entitySelected"));
   NER_SECOND_LABEL = element(by.css(".questionContainer button:nth-child(2)"));
-  NER_FIRST_SPAN_TEXT = element(by.css("div.nerBox span.spanIndex0"));
-  NER_SECOND_SPAN_TEXT = element(by.css("div.nerBox span.spanIndex1"));
-  NER_SELECTED_MARK_TEXT = element(by.css("div.nerBox mark.markSelected.c-0"));
-  NER_MARK = element.all(by.css("div.nerBox mark"));
+  MAIN_TEXT = element(by.css("div.nerPassage span[id=mainText]"));
+  NER_SELECTED_MARK_TEXT = element(by.css("div.selectedSection div.spanSelected:first-child"));
+  NER_SELECTED_MARK_CLEAR = element(by.css("div.selectedSection div.spanSelected:first-child span.clear"));
+  NER_MARK = element.all(by.css("div.spanSelected"));
   BACK_BTN = element(by.css("button.btn.btn-outline clr-icon[shape=undo]"));
   NER_TICKET_AREA = element(by.css(".questionContainer .nerBox"));
   LOG_FILTER_SELECT = element(by.css("select.filterSelect"));
@@ -201,15 +201,17 @@ export class AnnotatePage extends CommonPage {
         await browser.sleep(2000);
         await this.annotateNer();
       } else {
-        await FunctionUtil.elementVisibilityOf(this.NER_FIRST_SPAN_TEXT);
-        await this.NER_FIRST_SPAN_TEXT.click();
+        await FunctionUtil.elementVisibilityOf(this.MAIN_TEXT);
+        FunctionUtil.mouseDragMove(this.MAIN_TEXT, { x: 0, y: 0 }, { x: 100, y: 0 })
+        await browser.sleep(1000);
         await browser.waitForAngularEnabled(false);
         await browser.sleep(2000);
         await FunctionUtil.elementVisibilityOf(this.NER_SECOND_LABEL);
         await this.NER_SECOND_LABEL.click();
         await browser.sleep(1000);
-        await FunctionUtil.elementVisibilityOf(this.NER_SECOND_SPAN_TEXT);
-        await this.NER_SECOND_SPAN_TEXT.click();
+        FunctionUtil.mouseDragMove(this.MAIN_TEXT, { x: 50, y: 0 }, { x: 150, y: 0 })
+        await browser.waitForAngularEnabled(false);
+        await browser.sleep(2000);
         await FunctionUtil.elementVisibilityOf(this.ANNOTATE_SUBMIT_BTN);
         await this.ANNOTATE_SUBMIT_BTN.click();
         console.log("finish ner annotate");
@@ -334,7 +336,9 @@ export class AnnotatePage extends CommonPage {
 
   async removeAnnotatedNer() {
     await FunctionUtil.elementVisibilityOf(this.NER_SELECTED_MARK_TEXT);
-    await this.NER_SELECTED_MARK_TEXT.click();
+    await browser.actions().mouseMove(this.NER_SELECTED_MARK_TEXT).perform();
+    await FunctionUtil.elementVisibilityOf(this.NER_SELECTED_MARK_CLEAR);
+    await this.NER_SELECTED_MARK_CLEAR.click();  
     await browser.waitForAngularEnabled(false);
     await FunctionUtil.elementVisibilityOf(this.ANNOTATE_SUBMIT_BTN);
     await this.ANNOTATE_SUBMIT_BTN.click();
