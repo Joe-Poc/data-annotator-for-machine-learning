@@ -85,6 +85,9 @@ export class AnnotatePage extends CommonPage {
   );
   LOG_SECOND_LABEL = element(by.buttonText("test2"));
   MULTIPLE_SLIDERS = element.all(by.css(".labelCheckbox ngx-slider"));
+  SCORE_IPUT = element.all(by.css("input[id='scoreInput']"));
+  ALERT_TEXT = element(by.css('div.alert-text'));
+  INPUT_ERROR = element(by.css(".clr-error"));
 
   async navigateTo() {
     await browser.sleep(5000);
@@ -336,10 +339,17 @@ export class AnnotatePage extends CommonPage {
 
   async removeAnnotatedNer() {
     await FunctionUtil.elementVisibilityOf(this.NER_SELECTED_MARK_TEXT);
+    await this.NER_SELECTED_MARK_TEXT.click();  
+    await browser.sleep(2000);
     await browser.actions().mouseMove(this.NER_SELECTED_MARK_TEXT).perform();
     await FunctionUtil.elementVisibilityOf(this.NER_SELECTED_MARK_CLEAR);
     await this.NER_SELECTED_MARK_CLEAR.click();  
     await browser.waitForAngularEnabled(false);
+    await this.backToPrevious();
+    await FunctionUtil.elementVisibilityOf(this.ALERT_TEXT);
+    await browser.sleep(2000);
+    await browser.waitForAngularEnabled(false);
+    await FunctionUtil.elementVisibilityOf(this.NER_SELECTED_MARK_TEXT);
     await FunctionUtil.elementVisibilityOf(this.ANNOTATE_SUBMIT_BTN);
     await this.ANNOTATE_SUBMIT_BTN.click();
   }
@@ -482,6 +492,31 @@ export class AnnotatePage extends CommonPage {
     });
     await browser.waitForAngularEnabled(false);
     await browser.sleep(1000);
+    await this.ANNOTATE_SUBMIT_BTN.click();
+  }
+
+  async setMultipleNumbericByInput(inputValue) {
+    this.MULTIPLE_LABELS.then(async (labels) => {
+      labels.forEach(async (element) => {
+        await element.click();
+      });
+    });
+    this.SCORE_IPUT.then(async (inputs) => {
+      inputs.forEach(async (input) => {
+          await input.sendKeys(inputValue);
+      });
+    });
+    await browser.waitForAngularEnabled(false);
+    await browser.sleep(1000);
+    await this.ANNOTATE_SUBMIT_BTN.click();
+    await FunctionUtil.elementVisibilityOf(this.INPUT_ERROR);
+    await browser.sleep(2000);
+    this.SCORE_IPUT.then(async (inputs) => {
+      inputs.forEach(async (input) => {
+          await input.clear();
+          await input.sendKeys(inputValue);
+      });
+    });
     await this.ANNOTATE_SUBMIT_BTN.click();
   }
 }

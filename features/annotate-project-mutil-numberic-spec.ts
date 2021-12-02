@@ -70,7 +70,7 @@ describe("annotate mutil numberic project ...", () => {
       await annotatePage.waitForPageLoading();
       await browser.sleep(2000);
       await annotatePage.clickHistoryBack();
-      await annotatePage.selectMultipleNumbericLable(projectCreateData.TextMutilNumbericProject.sliderValue);
+      await annotatePage.setMultipleNumbericByInput(projectCreateData.TextMutilNumbericProject.inputValue);
       await annotatePage.waitForPageLoading();
       await browser.sleep(2000);
       since("the content should not be empty")
