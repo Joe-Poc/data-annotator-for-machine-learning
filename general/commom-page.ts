@@ -70,6 +70,7 @@ export class CommonPage {
   );
   SHOW_ICON = element(by.css("clr-icon.showIcon"));
   HIDE_ICON = element(by.css("div.isShowHide"));
+  IMG_RADIO = element(by.css("clr-radio-wrapper label[for='image']"));
 
   getTableLength() {
     return this.Table_LISTS.count();
@@ -245,6 +246,37 @@ export class CommonPage {
     await FunctionUtil.elementVisibilityOf(this.UPLOAD_CSV_OK_BTN);
     await this.UPLOAD_CSV_OK_BTN.click();
     await this.waitForUploadloading();
+  }
+
+  async uploadExistCSV(csvName: string, localCsvPath: string) {
+    await FunctionUtil.elementVisibilityOf(this.UPLOAD_CSV_BTN);
+    await this.UPLOAD_CSV_BTN.click();
+    await this.CSV_NAME.clear();
+    await this.CSV_NAME.sendKeys(csvName);
+    await this.setLocalCSVPath(localCsvPath);
+    await browser.sleep(2000);
+    await FunctionUtil.elementVisibilityOf(this.UPLOAD_CSV_OK_BTN);
+    await this.UPLOAD_CSV_OK_BTN.click();
+    await browser.sleep(2000);
+    await this.UPLOAD_CSV_CANCEL_BTN.click();
+    await this.waitForUploadloading();
+  }
+
+  async uploadErrorFormatCSV(csvName: string, localCsvPath: string) {
+    await FunctionUtil.elementVisibilityOf(this.UPLOAD_CSV_BTN);
+    await this.UPLOAD_CSV_BTN.click();
+    await this.CSV_NAME.clear();
+    await this.CSV_NAME.sendKeys(csvName);
+    await this.setLocalCSVPath(localCsvPath);
+    console.log('uploadErrorFormatCSV1');
+    await this.IMG_RADIO.click();
+    console.log('uploadErrorFormatCSV3')
+    await browser.sleep(2000);
+    await FunctionUtil.elementVisibilityOf(this.UPLOAD_CSV_OK_BTN);
+    await this.UPLOAD_CSV_OK_BTN.click();
+    await browser.sleep(2000);
+    await this.UPLOAD_CSV_CANCEL_BTN.click();
+    await browser.sleep(2000);
   }
 
   waitForUploadloading() {

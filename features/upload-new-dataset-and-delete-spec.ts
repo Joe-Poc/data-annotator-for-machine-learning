@@ -19,14 +19,22 @@ describe("upload new dataset on myDatasets page..", () => {
   let since = require("jasmine2-custom-message");
 
   it("Should upload new dataset successfully.", async (done) => {
-    console.log("start to create new CSV : " + New_CSV_Name);
+    console.log("start to create error formart CSV e2e Test Data Img ");
     await myDatasetsPage.navigateTo();
+    await myDatasetsPage.uploadErrorFormatCSV("e2e Test Data Img", CSV_Path);
+
+    console.log("start to create new CSV : " + New_CSV_Name);
     await myDatasetsPage.uploadCSV(New_CSV_Name, CSV_Path);
     await myDatasetsPage.waitForPageLoading();
     await browser.wait(
       ExpectedConditions.visibilityOf(PROMPT),
       Constant.DEFAULT_TIME_OUT
     );
+
+    console.log("start to create exist CSV : " + New_CSV_Name);
+    await myDatasetsPage.navigateTo();
+    await myDatasetsPage.uploadExistCSV(New_CSV_Name, CSV_Path);
+
     since("should has share successfully prompt")
       .expect(myDatasetsPage.getPromptText())
       .toContain("Upload success.");

@@ -88,6 +88,16 @@ export class CommonAppend {
       }
     });
     await browser.sleep(2000);
+    console.log('start to fileAppendSelectExistingFile21111', project_name);
+      const TICKET_COLUMN_CHECKBOX_FOR_TEXT = element(
+        by.css("clr-dg-row:nth-child(1) .clr-checkbox-wrapper label")
+      );
+
+      await FunctionUtil.elementVisibilityOf(TICKET_COLUMN_CHECKBOX_FOR_TEXT);
+      console.log('start to fileAppendSelectExistingFile3333');
+      TICKET_COLUMN_CHECKBOX_FOR_TEXT.click();
+      console.log('start to fileAppendSelectExistingFile44444');
+    await browser.sleep(2000);
     await FunctionUtil.click(this.APPEND_PUBLISH_BTN);
     if (await FunctionUtil.getAttribute(this.APPEND_BTN, 'class') == this.APPEND_DONE_CLASS) {
       return true;
