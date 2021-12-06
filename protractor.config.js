@@ -64,7 +64,7 @@ var conf = {
 
 exports.config = {
   allScriptsTimeout: 20000, //first page loading time
-  // specs: conf.poc_specs,
+// specs: conf.poc_specs,
   specs: process.env.IN? conf.specsConstIn.concat(conf.ci_specs): conf.specsConstOut.concat(conf.ci_specs),
   capabilities: {
     browserName: "chrome",
