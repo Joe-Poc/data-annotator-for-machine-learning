@@ -432,15 +432,11 @@ export class AnnotatePage extends CommonPage {
     console.log("finish to annotate image");
   }
 
-  async annotateImage2() {
-    console.log("start to annotate image2");
+  async annotateImgbyPoly() {
     await FunctionUtil.elementVisibilityOf(this.IMAGE_FIVE_BTN);
     await this.IMAGE_FIVE_BTN.click();
-    console.log("start to annotate image3");
     await FunctionUtil.elementVisibilityOf(this.IMAGE_LABEL2);
-    console.log("start to annotate image4");
     await this.IMAGE_LABEL2.click();
-    console.log("start to annotate image5");
     await browser.sleep(2000);
     await FunctionUtil.elementVisibilityOf(this.CANVAS);
     await FunctionUtil.mouseDownToClick(
@@ -462,7 +458,6 @@ export class AnnotatePage extends CommonPage {
     await browser.sleep(2000);
     await FunctionUtil.elementVisibilityOf(this.ANNOTATE_SUBMIT_BTN);
     await this.ANNOTATE_SUBMIT_BTN.click();
-    console.log("finish to annotate image2");
   }
 
   async deleteImageRectLabelDom() {

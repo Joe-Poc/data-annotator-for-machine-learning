@@ -62,7 +62,7 @@ describe("annotate project ...", () => {
       since("the history list should increase")
         .expect(await annotatePage.getHistoryLists())
         .toBe(1);
-      await annotatePage.annotateImage2();
+      await annotatePage.annotateImgbyPoly();
       done();
     } else {
       done.fail("can not filter out the consitent project....");
