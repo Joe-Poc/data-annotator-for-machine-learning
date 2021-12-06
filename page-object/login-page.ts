@@ -17,8 +17,10 @@ import { CommonPage } from "../general/commom-page";
 
 export class LoginPage extends CommonPage {
   SIGNIN_BTN = $(".header-actions .nav-link.nav-text");
-  BTN_Select = element(by.buttonText("Login with My VMware"));
+  // BTN_Select = element(by.partialLinkText("Login with My VMware"));
+  BTN_Select = $$('.login-group a').last();
   LOGIN_BTN = element(by.css("button[id=login-button]"));
+  SINGNIN_BTN = element(by.partialButtonText("SIGN IN"));
   TYPE_SELECT = $('select[name="provider"]');
   USER_NAME = $('input[name="username"]');
   PASSWORD = $('input[name="password"]');
@@ -56,10 +58,10 @@ export class LoginPage extends CommonPage {
   }
 
   async selectAccountType() {
-    await browser.getCurrentUrl();
+    let url = await browser.getCurrentUrl();
+    console.log(url);
     await FunctionUtil.elementVisibilityOf(this.BTN_Select);
     await this.BTN_Select.click();
-    await browser.getCurrentUrl();
   }
 
   async clickSignUpLink() {
@@ -95,6 +97,11 @@ export class LoginPage extends CommonPage {
   async clickLogInBtn() {
     await FunctionUtil.elementVisibilityOf(this.LOGIN_BTN);
     await this.LOGIN_BTN.click();
+  }
+
+  async clickSingnInBtn() {
+    await FunctionUtil.elementVisibilityOf(this.SINGNIN_BTN);
+    await this.SINGNIN_BTN.click();
   }
 
   async clickSignUpBtn() {

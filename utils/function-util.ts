@@ -10,7 +10,7 @@ import {
 } from "protractor";
 
 export class FunctionUtil {
-  private static DEFAULT_TIME_OUT = 200 * 1000;
+  private static DEFAULT_TIME_OUT = 60 * 1000;
 
   public static async selectFromListByIndex(
     ele: ElementFinder,
@@ -209,6 +209,16 @@ export class FunctionUtil {
     await browser
       .actions()
       .mouseMove(el, { x: taget.x, y: taget.y })
+      .click()
+      .perform();
+    await browser.sleep(1000);
+  }
+
+  public static async mouseDownToClick(el, taget) {
+    await browser
+      .actions()
+      .mouseMove(el, { x: taget.x, y: taget.y })
+      .mouseDown()
       .click()
       .perform();
     await browser.sleep(1000);

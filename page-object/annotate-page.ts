@@ -30,10 +30,10 @@ export class AnnotatePage extends CommonPage {
   SKIP_BTN = element(by.css("button.btn.btn-outline clr-icon[shape=ban]"));
   NER_SELECTED_LABEL = element(by.css("button.btn.entitySelected"));
   NER_SECOND_LABEL = element(by.css(".questionContainer button:nth-child(2)"));
-  NER_FIRST_SPAN_TEXT = element(by.css("div.nerBox span.spanIndex0"));
-  NER_SECOND_SPAN_TEXT = element(by.css("div.nerBox span.spanIndex1"));
-  NER_SELECTED_MARK_TEXT = element(by.css("div.nerBox mark.markSelected.c-0"));
-  NER_MARK = element.all(by.css("div.nerBox mark"));
+  MAIN_TEXT = element(by.css("div.nerPassage span[id=mainText]"));
+  NER_SELECTED_MARK_TEXT = element(by.css("div.selectedSection div.spanSelected:first-child"));
+  NER_SELECTED_MARK_CLEAR = element(by.css("div.selectedSection div.spanSelected:first-child span.clear"));
+  NER_MARK = element.all(by.css("div.spanSelected"));
   BACK_BTN = element(by.css("button.btn.btn-outline clr-icon[shape=undo]"));
   NER_TICKET_AREA = element(by.css(".questionContainer .nerBox"));
   LOG_FILTER_SELECT = element(by.css("select.filterSelect"));
@@ -69,7 +69,10 @@ export class AnnotatePage extends CommonPage {
   );
   CANVAS = element(by.css("canvas"));
   IMAGE_LABEL = element.all(by.css("span.ant-tag")).get(0);
+  IMAGE_LABEL2 = element.all(by.css("span.ant-tag")).get(2);
+  IMAGE_FIVE_BTN = element.all(by.css("div.panel button")).get(1);
   IMAGE_TRASH_BTN = element.all(by.css("div.panel button")).get(2);
+  IMAGE_EEFRESH_BTN = element.all(by.css("div.panel button")).get(3);
   WRAP_BTN = element(by.css('div.editBar button[title="Wrap Text"]'));
   DISPLAY_SELECT = element(by.css("select[formcontrolname='renderFormat']"));
   DISPLAY_SELECT_OPTIONS = element.all(
@@ -85,6 +88,9 @@ export class AnnotatePage extends CommonPage {
   );
   LOG_SECOND_LABEL = element(by.buttonText("test2"));
   MULTIPLE_SLIDERS = element.all(by.css(".labelCheckbox ngx-slider"));
+  SCORE_IPUT = element.all(by.css("input[id='scoreInput']"));
+  ALERT_TEXT = element(by.css('div.alert-text'));
+  INPUT_ERROR = element(by.css(".clr-error"));
 
   async navigateTo() {
     await browser.sleep(5000);
@@ -201,15 +207,17 @@ export class AnnotatePage extends CommonPage {
         await browser.sleep(2000);
         await this.annotateNer();
       } else {
-        await FunctionUtil.elementVisibilityOf(this.NER_FIRST_SPAN_TEXT);
-        await this.NER_FIRST_SPAN_TEXT.click();
+        await FunctionUtil.elementVisibilityOf(this.MAIN_TEXT);
+        FunctionUtil.mouseDragMove(this.MAIN_TEXT, { x: 0, y: 0 }, { x: 100, y: 0 })
+        await browser.sleep(1000);
         await browser.waitForAngularEnabled(false);
         await browser.sleep(2000);
         await FunctionUtil.elementVisibilityOf(this.NER_SECOND_LABEL);
         await this.NER_SECOND_LABEL.click();
         await browser.sleep(1000);
-        await FunctionUtil.elementVisibilityOf(this.NER_SECOND_SPAN_TEXT);
-        await this.NER_SECOND_SPAN_TEXT.click();
+        FunctionUtil.mouseDragMove(this.MAIN_TEXT, { x: 50, y: 0 }, { x: 150, y: 0 })
+        await browser.waitForAngularEnabled(false);
+        await browser.sleep(2000);
         await FunctionUtil.elementVisibilityOf(this.ANNOTATE_SUBMIT_BTN);
         await this.ANNOTATE_SUBMIT_BTN.click();
         console.log("finish ner annotate");
@@ -334,8 +342,17 @@ export class AnnotatePage extends CommonPage {
 
   async removeAnnotatedNer() {
     await FunctionUtil.elementVisibilityOf(this.NER_SELECTED_MARK_TEXT);
-    await this.NER_SELECTED_MARK_TEXT.click();
+    await this.NER_SELECTED_MARK_TEXT.click();  
+    await browser.sleep(2000);
+    await browser.actions().mouseMove(this.NER_SELECTED_MARK_TEXT).perform();
+    await FunctionUtil.elementVisibilityOf(this.NER_SELECTED_MARK_CLEAR);
+    await this.NER_SELECTED_MARK_CLEAR.click();  
     await browser.waitForAngularEnabled(false);
+    await this.backToPrevious();
+    await FunctionUtil.elementVisibilityOf(this.ALERT_TEXT);
+    await browser.sleep(2000);
+    await browser.waitForAngularEnabled(false);
+    await FunctionUtil.elementVisibilityOf(this.NER_SELECTED_MARK_TEXT);
     await FunctionUtil.elementVisibilityOf(this.ANNOTATE_SUBMIT_BTN);
     await this.ANNOTATE_SUBMIT_BTN.click();
   }
@@ -415,6 +432,39 @@ export class AnnotatePage extends CommonPage {
     console.log("finish to annotate image");
   }
 
+  async annotateImage2() {
+    console.log("start to annotate image2");
+    await FunctionUtil.elementVisibilityOf(this.IMAGE_FIVE_BTN);
+    await this.IMAGE_FIVE_BTN.click();
+    console.log("start to annotate image3");
+    await FunctionUtil.elementVisibilityOf(this.IMAGE_LABEL2);
+    console.log("start to annotate image4");
+    await this.IMAGE_LABEL2.click();
+    console.log("start to annotate image5");
+    await browser.sleep(2000);
+    await FunctionUtil.elementVisibilityOf(this.CANVAS);
+    await FunctionUtil.mouseDownToClick(
+      this.CANVAS,
+      { x: 30, y: 30 },
+    );
+    await FunctionUtil.mouseDownToClick(
+      this.CANVAS,
+      { x: 400, y: 400 },
+    );
+    await FunctionUtil.mouseDownToClick(
+      this.CANVAS,
+      { x: 20, y: 400 },
+    );
+    await FunctionUtil.mouseDownToClick(
+      this.CANVAS,
+      { x: 30, y: 30 },
+    );
+    await browser.sleep(2000);
+    await FunctionUtil.elementVisibilityOf(this.ANNOTATE_SUBMIT_BTN);
+    await this.ANNOTATE_SUBMIT_BTN.click();
+    console.log("finish to annotate image2");
+  }
+
   async deleteImageRectLabelDom() {
     console.log("start to deleteImageRectLabelDom");
     await FunctionUtil.mouseMoveToClick(
@@ -478,6 +528,31 @@ export class AnnotatePage extends CommonPage {
     });
     await browser.waitForAngularEnabled(false);
     await browser.sleep(1000);
+    await this.ANNOTATE_SUBMIT_BTN.click();
+  }
+
+  async setMultipleNumbericByInput(inputValue) {
+    this.MULTIPLE_LABELS.then(async (labels) => {
+      labels.forEach(async (element) => {
+        await element.click();
+      });
+    });
+    this.SCORE_IPUT.then(async (inputs) => {
+      inputs.forEach(async (input) => {
+          await input.sendKeys(inputValue);
+      });
+    });
+    await browser.waitForAngularEnabled(false);
+    await browser.sleep(1000);
+    await this.ANNOTATE_SUBMIT_BTN.click();
+    await FunctionUtil.elementVisibilityOf(this.INPUT_ERROR);
+    await browser.sleep(2000);
+    this.SCORE_IPUT.then(async (inputs) => {
+      inputs.forEach(async (input) => {
+          await input.clear();
+          await input.sendKeys(inputValue);
+      });
+    });
     await this.ANNOTATE_SUBMIT_BTN.click();
   }
 }

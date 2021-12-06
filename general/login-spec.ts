@@ -11,22 +11,26 @@ describe("Service", () => {
   let loginPage: LoginPage;
   let loginBusiness: LoginBussiness;
 
-  beforeAll((done) => {
+  beforeAll(async (done) => {
     loginPage = new LoginPage();
     loginBusiness = new LoginBussiness();
-    browser
-      .sleep(1000)
-      .then(() => {
-        loginPage.navigateTo();
-      })
-      .then(() => {
-        browser.sleep(1000);
-        done();
-      });
+
+    await browser.sleep(1000);
+    await loginPage.navigateTo();
+    await browser.sleep(10000);
+    console.log(await browser.getCurrentUrl())
+    const myVMShow = await browser.isElementPresent(loginPage.BTN_Select);
+    console.log("has the selecte button: ", myVMShow);
+    if (myVMShow) {
+      console.log("Login with My VMware");
+      await loginPage.selectAccountType();
+    }
+    done();
+
   });
 
   it("Should login with normal user successfully", async (done) => {
-    await loginBusiness.login(Constant.username, Constant.password);
+    await loginBusiness.loginWithMyVM(Constant.username, Constant.password);
     done();
   });
 });
