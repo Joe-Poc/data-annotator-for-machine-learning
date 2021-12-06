@@ -69,7 +69,10 @@ export class AnnotatePage extends CommonPage {
   );
   CANVAS = element(by.css("canvas"));
   IMAGE_LABEL = element.all(by.css("span.ant-tag")).get(0);
+  IMAGE_LABEL2 = element.all(by.css("span.ant-tag")).get(2);
+  IMAGE_FIVE_BTN = element.all(by.css("div.panel button")).get(1);
   IMAGE_TRASH_BTN = element.all(by.css("div.panel button")).get(2);
+  IMAGE_EEFRESH_BTN = element.all(by.css("div.panel button")).get(3);
   WRAP_BTN = element(by.css('div.editBar button[title="Wrap Text"]'));
   DISPLAY_SELECT = element(by.css("select[formcontrolname='renderFormat']"));
   DISPLAY_SELECT_OPTIONS = element.all(
@@ -427,6 +430,39 @@ export class AnnotatePage extends CommonPage {
     await FunctionUtil.elementVisibilityOf(this.ANNOTATE_SUBMIT_BTN);
     await this.ANNOTATE_SUBMIT_BTN.click();
     console.log("finish to annotate image");
+  }
+
+  async annotateImage2() {
+    console.log("start to annotate image2");
+    await FunctionUtil.elementVisibilityOf(this.IMAGE_FIVE_BTN);
+    await this.IMAGE_FIVE_BTN.click();
+    console.log("start to annotate image3");
+    await FunctionUtil.elementVisibilityOf(this.IMAGE_LABEL2);
+    console.log("start to annotate image4");
+    await this.IMAGE_LABEL2.click();
+    console.log("start to annotate image5");
+    await browser.sleep(2000);
+    await FunctionUtil.elementVisibilityOf(this.CANVAS);
+    await FunctionUtil.mouseDownToClick(
+      this.CANVAS,
+      { x: 30, y: 30 },
+    );
+    await FunctionUtil.mouseDownToClick(
+      this.CANVAS,
+      { x: 400, y: 400 },
+    );
+    await FunctionUtil.mouseDownToClick(
+      this.CANVAS,
+      { x: 20, y: 400 },
+    );
+    await FunctionUtil.mouseDownToClick(
+      this.CANVAS,
+      { x: 30, y: 30 },
+    );
+    await browser.sleep(2000);
+    await FunctionUtil.elementVisibilityOf(this.ANNOTATE_SUBMIT_BTN);
+    await this.ANNOTATE_SUBMIT_BTN.click();
+    console.log("finish to annotate image2");
   }
 
   async deleteImageRectLabelDom() {

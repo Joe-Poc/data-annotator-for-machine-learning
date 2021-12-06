@@ -214,6 +214,16 @@ export class FunctionUtil {
     await browser.sleep(1000);
   }
 
+  public static async mouseDownToClick(el, taget) {
+    await browser
+      .actions()
+      .mouseMove(el, { x: taget.x, y: taget.y })
+      .mouseDown()
+      .click()
+      .perform();
+    await browser.sleep(1000);
+  }
+
   public static async acceptAlertPopup() {
     if (await ExpectedConditions.alertIsPresent()) {
       await browser.switchTo().alert().accept();
