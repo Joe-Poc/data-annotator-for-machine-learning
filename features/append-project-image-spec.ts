@@ -12,7 +12,7 @@ describe("verify image project append funtion", () => {
   const commonAppend: CommonAppend = new CommonAppend();
 
   it("Qick append verify add new line", async () => {
-    expect(await commonAppend.appenNewLine(project_name)).toBeTruthy;
+    expect(await commonAppend.appenNewLine(project_name, false)).toBeTruthy;
   });
 
   it("Qick append verify delete new line", async () => {
@@ -32,7 +32,7 @@ describe("verify image project append funtion", () => {
   });
 
   it("File append verify selete existing file", async () => {
-    expect(await commonAppend.fileAppendSelectExistingFile(project_name, Constant.dataset_name_image))
+    expect(await commonAppend.fileAppendSelectExistingFile(project_name, Constant.dataset_name_image, false))
       .toBeTruthy;
   });
 

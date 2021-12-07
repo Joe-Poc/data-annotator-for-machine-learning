@@ -12,7 +12,7 @@ describe('verify log project append funtion', () => {
   const commonAppend: CommonAppend = new CommonAppend;
 
   it('Qick append verify add new line', async () => {
-    expect(await commonAppend.appenNewLine(project_name)).toBeTruthy;
+    expect(await commonAppend.appenNewLine(project_name, false)).toBeTruthy;
   })
 
   it('Qick append verify delete new line', async () => {
@@ -29,7 +29,7 @@ describe('verify log project append funtion', () => {
 
   it('File append verify selete existing log file', async () => {
     console.log('Constant.dataset_name_log', Constant.dataset_name_log);
-    expect(await commonAppend.fileAppendSelectExistingFile(project_name, Constant.dataset_name_log)).toBeTruthy;
+    expect(await commonAppend.fileAppendSelectExistingFile(project_name, Constant.dataset_name_log, false)).toBeTruthy;
   })
 
   it('LOCAL file change and upload to append', async () => {

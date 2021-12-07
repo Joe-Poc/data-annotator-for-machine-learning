@@ -26,11 +26,17 @@ export class CommonAppend {
   UPLOAD_INPUT_ELEMENT = $('#upfiles');
   DATASET_NAME_ELEMENT = $('#datasetsName');
 
-  async appenNewLine(project_name){
+  SET_DATA_TAB = $('ul[role="tablist"] .nav-item:last-child');
+  TICKET_COLUMN_CHECKBOX_FOR_TEXT = element(
+    by.css("clr-dg-row:nth-child(4) .clr-checkbox-wrapper label")
+  );
+  TICKET_COLUMNS = element.all(by.css("clr-dg-row label"));
+
+  async appenNewLine(project_name, isNer){
     await this.locateProjectAppend(project_name);
     await FunctionUtil.click(this.APP_NEW_LINE_BTN);
     await browser.sleep(1000);
-    if (await FunctionUtil.getElementsNum(this.TABLE_LIST) === 3) {
+    if (await FunctionUtil.getElementsNum(this.TABLE_LIST) === (isNer ? 2 : 3)) {
       return true;
     }
     return false;
@@ -75,7 +81,7 @@ export class CommonAppend {
     return false;
   }
 
-  async fileAppendSelectExistingFile(project_name, dataset_name){
+  async fileAppendSelectExistingFile(project_name, dataset_name, isNer){
     console.log('start to fileAppendSelectExistingFile');
     await this.locateProjectAppend(project_name);
     await FunctionUtil.click(this.APPEND_BY_FILE_TAB);
@@ -88,6 +94,10 @@ export class CommonAppend {
       }
     });
     await browser.sleep(2000);
+    if (isNer) {
+      await this.clickExistingLabel(2, 4);
+    }
+    await browser.sleep(2000);
     await FunctionUtil.click(this.APPEND_PUBLISH_BTN);
     if (await FunctionUtil.getAttribute(this.APPEND_BTN, 'class') == this.APPEND_DONE_CLASS) {
       return true;
@@ -96,6 +106,24 @@ export class CommonAppend {
     return false;
   }
 
+  async clickExistingLabel(startIndex, endIndex) {
+    await FunctionUtil.elementVisibilityOf(this.SET_DATA_TAB);
+    await this.SET_DATA_TAB.click();
+    await FunctionUtil.elementVisibilityOf(
+      this.TICKET_COLUMN_CHECKBOX_FOR_TEXT
+    );
+    this.TICKET_COLUMNS.then(async (column) => {
+      for (let i = startIndex; i <= endIndex; i++) {
+        await column[i].click();
+      }
+    });
+    await browser.sleep(2000);
+    this.TICKET_COLUMNS.then(async (column) => {
+      for (let i = endIndex; i < (endIndex + 1); i++) {
+        await column[i].click();
+      }
+    });
+  }
 
   async locateProjectAppend(project_name){
     await FunctionUtil.click(this.COMMUNITY_DATASETS_TAB);
