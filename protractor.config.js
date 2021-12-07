@@ -33,6 +33,7 @@ var conf = {
     "./features/download-share-projects-spec.ts",
     "./features/creat-ner-labels-existing-project-spec.ts",
     "./features/annotate-project-ner-labels-existing-spec.ts",
+    "./features/append-ner-project-spec.ts",
     "./features/creat-image-project-spec.ts",
     "./features/annotate-project-image-spec.ts",
     "./features/append-project-image-spec.ts",
