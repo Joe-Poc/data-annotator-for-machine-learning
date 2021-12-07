@@ -63,6 +63,15 @@ describe("annotate project ...", () => {
         .expect(await annotatePage.getHistoryLists())
         .toBe(1);
       await annotatePage.annotateImgbyPoly();
+      await browser.sleep(2000);
+      await annotatePage.clickHistoryBack();
+      await browser.sleep(2000);
+      await annotatePage.skipTicket();
+      await browser.sleep(2000);
+      await annotatePage.backToPrevious();
+      await browser.sleep(2000);
+      await annotatePage.submitLogAnnotate();
+      await annotatePage.waitForPageLoading();
       done();
     } else {
       done.fail("can not filter out the consitent project....");

@@ -445,11 +445,11 @@ export class AnnotatePage extends CommonPage {
     );
     await FunctionUtil.mouseDownToClick(
       this.CANVAS,
-      { x: 400, y: 400 },
+      { x: 40, y: 40 },
     );
     await FunctionUtil.mouseDownToClick(
       this.CANVAS,
-      { x: 20, y: 400 },
+      { x: 20, y: 40 },
     );
     await FunctionUtil.mouseDownToClick(
       this.CANVAS,
