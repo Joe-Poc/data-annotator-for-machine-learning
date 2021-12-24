@@ -52,7 +52,7 @@
     "Labels": "test1,test2",
     "Source": "log-test-data.tgz",
     "ticketSessions": 10,
-    "keywordFilter": "option",
+    "keywordFilter": "build",
     "regexFilter": "/[A-Z]/",
     "rowFreeText": "row freeText",
     "logFreeText": "log freeText",

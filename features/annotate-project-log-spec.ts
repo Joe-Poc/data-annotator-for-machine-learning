@@ -260,7 +260,7 @@ describe("annotate project ...", () => {
   it("Should front to end multiple label successfully.", async (done) => {
     await browser.sleep(2000);
     await annotatePage.dragAnnotateLog(
-      await annotatePage.findLogLine(1),
+      await annotatePage.findLogLine(3),
       await annotatePage.findLogLine(5)
     );
     await browser.sleep(2000);
@@ -271,8 +271,8 @@ describe("annotate project ...", () => {
     await annotatePage.changeLogLabel();
     await browser.sleep(2000);
     await annotatePage.dragAnnotateLog(
-      await annotatePage.findLogLine(6),
-      await annotatePage.findLogLine(1)
+      await annotatePage.findLogLine(3),
+      await annotatePage.findLogLine(6)
     );
     await browser.sleep(2000);
     await annotatePage.backToPrevious();
