@@ -352,7 +352,6 @@ export class AnnotatePage extends CommonPage {
     await FunctionUtil.elementVisibilityOf(this.ALERT_TEXT);
     await browser.sleep(2000);
     await browser.waitForAngularEnabled(false);
-    await FunctionUtil.elementVisibilityOf(this.NER_SELECTED_MARK_TEXT);
     await FunctionUtil.elementVisibilityOf(this.ANNOTATE_SUBMIT_BTN);
     await this.ANNOTATE_SUBMIT_BTN.click();
   }
