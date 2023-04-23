@@ -1,5 +1,5 @@
 /*
-Copyright 2019-2021 VMware, Inc.
+Copyright 2019-2023 VMware, Inc.
 SPDX-License-Identifier: Apache-2.0
 */
 
@@ -16,7 +16,8 @@ function modelChart(options) {
   frequency = options.frequency;
   threshold = options.threshold;
   estimator = options.estimator;
-  model_margin = { top: 50, right: 300, bottom: 10, left: 40 };
+  (samplingStrategy = options.samplingStrategy),
+    (model_margin = { top: 50, right: 250, bottom: 10, left: 40 });
   data = options.data;
   data = Object.assign(
     data.map(({ index, accuracy }) => ({ name: index, value: +accuracy })),
@@ -45,7 +46,7 @@ function modelChart(options) {
     .scaleLinear()
     .domain(d3.extent(data, (d) => d.name))
     .nice()
-    .range([model_margin.left, model_width - model_margin.right]);
+    .range([model_margin.left, model_width - model_margin.right - 110]);
   //  NOTE: xAxis not auto combined,will list every ticket!!!!!!!
   //  var x = d3.scaleBand()
   // 	.domain(data.map(d => d.name))
@@ -77,7 +78,7 @@ function modelChart(options) {
   svg
     .append('text')
     .attr('text-anchor', 'end')
-    .attr('x', model_width - model_margin.right)
+    .attr('x', model_width - model_margin.right - 110)
     .attr('y', model_height + 35)
     .text('# Annotated Tickets');
 
@@ -93,55 +94,72 @@ function modelChart(options) {
   // Handmade legend
   svg
     .append('circle')
-    .attr('cx', model_width - model_margin.right + 30)
+    .attr('cx', model_width - model_margin.right - 10)
     .attr('cy', 100)
     .attr('r', 4)
     .style('fill', 'steelblue');
   svg
     .append('circle')
-    .attr('cx', model_width - model_margin.right + 30)
-    .attr('cy', 130)
-    .attr('r', 4)
-    .style('fill', 'steelblue');
-  svg
-    .append('circle')
-    .attr('cx', model_width - model_margin.right + 30)
+    .attr('cx', model_width - model_margin.right - 10)
     .attr('cy', 160)
     .attr('r', 4)
     .style('fill', 'steelblue');
   svg
     .append('circle')
-    .attr('cx', model_width - model_margin.right + 30)
-    .attr('cy', 190)
+    .attr('cx', model_width - model_margin.right - 10)
+    .attr('cy', 220)
+    .attr('r', 4)
+    .style('fill', 'steelblue');
+  svg
+    .append('circle')
+    .attr('cx', model_width - model_margin.right - 10)
+    .attr('cy', 250)
     .attr('r', 4)
     .style('fill', 'steelblue');
 
   svg
     .append('text')
-    .attr('x', model_width - model_margin.right + 40)
+    .attr('x', model_width - model_margin.right)
     .attr('y', 100)
-    .text('Estimator: ' + estimator)
+    .text('Estimator: ')
     .style('font-size', '12px')
     .attr('alignment-baseline', 'middle');
-  // svg.append("text").attr("x", model_width - model_margin.right + 40).attr("y", 115).text(estimator).style("font-size", "12px").attr("alignment-baseline", "middle")
+
   svg
     .append('text')
-    .attr('x', model_width - model_margin.right + 40)
+    .attr('x', model_width - model_margin.right)
     .attr('y', 130)
-    .text('Sampling Strategy: Pool-based sampling')
+    .text(estimator)
     .style('font-size', '12px')
     .attr('alignment-baseline', 'middle');
+
   svg
     .append('text')
-    .attr('x', model_width - model_margin.right + 40)
+    .attr('x', model_width - model_margin.right)
     .attr('y', 160)
+    .text('Sampling Strategy: ')
+    .style('font-size', '12px')
+    .attr('alignment-baseline', 'middle');
+
+  svg
+    .append('text')
+    .attr('x', model_width - model_margin.right)
+    .attr('y', 190)
+    .text(samplingStrategy)
+    .style('font-size', '12px')
+    .attr('alignment-baseline', 'middle');
+
+  svg
+    .append('text')
+    .attr('x', model_width - model_margin.right)
+    .attr('y', 220)
     .text('Threshold: ' + threshold)
     .style('font-size', '12px')
     .attr('alignment-baseline', 'middle');
   svg
     .append('text')
-    .attr('x', model_width - model_margin.right + 40)
-    .attr('y', 190)
+    .attr('x', model_width - model_margin.right)
+    .attr('y', 250)
     .text('Frequency: ' + frequency)
     .style('font-size', '12px')
     .attr('alignment-baseline', 'middle');
@@ -162,7 +180,7 @@ function modelChart(options) {
     .attr('y1', y)
     .attr('y2', y)
     .attr('x1', model_margin.left)
-    .attr('x2', model_width - model_margin.right)
+    .attr('x2', model_width - model_margin.right - 110)
     .attr('stroke', '#000000')
     .attr('stroke-width', 0.1)
     .attr('shape-rendering', 'crispEdges');
@@ -241,7 +259,7 @@ function modelChart(options) {
     .attr('fill', 'white')
     .attr('stroke', 'steelblue')
     .attr('stroke-width', 2)
-    .on('mouseover', function (d, i) {
+    .on('mouseover', function (event, d) {
       d3.select(this).style('fill', 'steelblue');
       d3.select(this).attr('r', 7);
       Tooltip.style('visibility', 'visible').html(
@@ -250,14 +268,14 @@ function modelChart(options) {
       hoverLine.style('visibility', 'visible');
       return;
     })
-    .on('mousemove', function (d, i) {
+    .on('mousemove', function (event, d) {
       Tooltip.style('top', event.pageY - 30 + 'px').style('left', event.pageX + 10 + 'px');
-      var mouse_x = d3.mouse(this)[0];
+      var mouse_x = d3.pointer(event)[0];
       hoverLine.attr('x1', mouse_x).attr('x2', mouse_x);
       hoverLineGroup.style('opacity', 1);
       return;
     })
-    .on('mouseout', function (d, i) {
+    .on('mouseout', function (event, d) {
       d3.select(this).style('fill', 'white');
       d3.select(this).attr('r', 4);
       hoverLine.style('visibility', 'hidden');
@@ -281,9 +299,9 @@ function modelChart(options) {
         .on('zoom', zoomed),
     );
 
-    function zoomed() {
+    function zoomed(event) {
       // recover the new scale
-      var newX = d3.event.transform.rescaleX(x);
+      var newX = event.transform.rescaleX(x);
       // update axes with these new boundaries
       xAxis.call(d3.axisBottom(newX).ticks(10).tickSizeOuter(0));
       svg.selectAll('.myCircle').attr('cx', function (d) {

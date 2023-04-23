@@ -16,6 +16,7 @@ module.exports = {
     USER_DELETE: "/users", //swagger
     USER_ROLE_EDIT: "/users", //swagger
     USER_ROLE: "/users/roles", //swagger
+    USER_DASHBOARD: "/users/dashboard", //swagger
     FILE_DATASET_QUERY: "/users/datasets",//swagger
     PROJECT_LIST_ANNOTATOR: "/users/projects/names", // no
 
@@ -28,6 +29,7 @@ module.exports = {
     PROJECT_SAVE: "/projects", // no
     PROJECT_DELETE: "/projects", // swagger
     PROJECT_LIST: "/projects", // swagger
+    PROJECT_INTEGRATION_EDIT: "/projects/integration",
     PROJECT_INFO: "/projects/details", // swagger
     PROJECT_NAME: "/projects/names", // no
     PROJECT_MODEL_ACCURACY: "/projects/al/accuracy",//swagger
@@ -36,13 +38,14 @@ module.exports = {
     COUNT_COMMUNITY_DOWNLOAD: "/projects/download/community-download-count",
     PROJECT_SHARE: "/projects/share", // swagger
     SRS_CATEGORIES: "/projects/labels", //no
+    PROJECT_UPDATE_LABEL: "/projects/labels",//swagger
     SRS_DELETE_LABEL: "/projects/labels",//swagger
     PROJECT_PREVIEW: "/projects/annotations", // swagger
     SRS_PROGRESS: "/projects/users/progression",//no
     PROJECT_REVIEW_LIST: "/projects/review",
-    PROJECT_LOG_FILE_LIST:"/projects/log/files",
-    PROJECT_LOG_FILE_FILTER:"/projects/log/filter",
-    
+    PROJECT_LOG_FILE_LIST: "/projects/log/files",
+    PROJECT_LOG_FILE_FILTER: "/projects/log/filter",
+
     //tickets
     SRS_UPDATE: "/projects/tickets",//swagger
     SRS_APPEND: "/projects/tickets", //swagger
@@ -66,22 +69,26 @@ module.exports = {
     FILE_SIGN_URL: "/datasets/s3/signed-url",//no
     FILE_DATASET_SAVE: "/datasets", //swagger--
     FILE_DATASET_DELETE: "/datasets",//swagger
+    FILE_DATASET_UPDATE: "/datasets",
     FILE_DATASET_NAME_UNIQUE: "/datasets/names",//no
     FILE_SUPER_COLLIDER_QUERY: "/query-from-superCollider",// swagger
     FILE_SET_DATA: "/datasets/set-data",
     FILE_DOWNLOAD_FROM_LOCAL_SYSTEM: "/datasets/download-from-local-system",
     FILE_DATASET_FILE_UNIQUE: "/datasets/file",
-    
+
     //email
     EMAIL_TO_OWNER: "/emails/send-to-owners",//swagger
-    EMAIL_TO_ANNOTATOR: "/emails/send-to-annotators",//swagger 
+    EMAIL_TO_ANNOTATOR: "/emails/send-to-annotators",//swagger
+    EMAIL_REGULAR_NOTIFICATION: "/emails/regular-notification/unsubscription",
 
     //Integration
     INTEGRATION_CSV: "/integration/labelled/csv",
 
     //import labelled dataset
-    DATASET_IMPORT:"/datasets/import",
+    DATASET_IMPORT: "/datasets/import",
     DB_UPDATE_COLUMN_TYPE: "/db/update-column-type",
+    //migration reviewed tickets info
+    MIGRATION_REVIEW_INFO: "/migration/review-info",
 
-
+    CONVERSATION_LIST: "/conversations-list"
 }

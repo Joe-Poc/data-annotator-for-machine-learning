@@ -11,6 +11,7 @@ const validator = require('../utils/validator');
 const config = require('../config/config');
 const mongoDb = require('../db/mongo.db');
 const { UserModel } = require('../db/db-connect');
+const MESSAGE = require('../config/code_msg');
 
 async function getAllusers(req) {
     await validator.checkUserRole(req.auth.email, ROLES.ADMIN);
@@ -22,39 +23,61 @@ async function saveUser(req) {
     
     if (config.ESP) {
         await validator.checkUserRole(req.auth.email, ROLES.ADMIN);
-    }else{
-        if (!req.body.email || !req.body.password) {
-            throw{CODE: 401, MSG: "USERNAME OR PASSWORD IS EMPTY"}
+    }
+    const users = req.body;
+    for (const u of users) {
+        if (!config.ESP && (!u.email || !u.password)) {
+            throw MESSAGE.VALIDATION_UNAUTH;
         }
+        console.log('[ USER ] service saveUser find user if exist');
+        const user = await mongoDb.findById(UserModel, u.email);
+        
+        if (user) {
+            if (!user.manul) {
+                throw MESSAGE.VALIDATION_USER_EXIST;
+            }
+            //user set by manul already
+            const conditions = {_id: u.email};
+            const options = {new: true};
+            let update = {
+                $set: {
+                    fullName: u.uname?u.uname: u.email.split("@")[0],
+                    manul: false,
+                }
+            };
+            if (u.password) {
+                update.$set.password = Buffer.from(u.password).toString("base64");
+            }
+            if (u.role) {
+                update.$set.role = u.role;
+            }
+            await mongoDb.findOneAndUpdate(UserModel, conditions, update, options);
+        }
+
+        let schema = {
+            _id: u.email,
+            email: u.email,
+            fullName: u.uname,
+            createdDate: Date.now(),
+            updateDate: Date.now(),
+        };
+        if (!u.uname) {
+            schema.fullName = u.email.split("@")[0];
+        }
+        if (u.password) {
+            schema.password = Buffer.from(u.password).toString("base64");
+        }
+        if (u.role) {
+            schema.role = u.role;
+        }
+        const flag = config.adminDefault.indexOf(u.email);
+        if (flag != -1) {
+            schema.role = ROLES.ADMIN;
+        }
+        
+        console.log(`[ USER ] service saveUser ${u.email} info when first time login`);
+        await mongoDb.saveBySchema(UserModel, schema);
     }
-    console.log('[ USER ] service saveUser find user if exist');
-    const user = await mongoDb.findById(UserModel, req.body.email);
-    if (user) {
-        throw{CODE: 4003, MSG: "USER ALREADY EXIST"}
-    }
-    //save user
-    console.log('[ USER ] service user not exist');
-    let schema = {
-        _id: req.body.email,
-        email: req.body.email,
-        fullName: req.body.uname,
-        createdDate: Date.now()
-    };
-    if (!req.body.uname) {
-        schema.fullName = req.body.email.split("@")[0];
-    }
-    if (req.body.password) {
-        schema.password = Buffer.from(req.body.password).toString("base64");
-    }
-    if (req.body.role) {
-        schema.password = req.body.role;
-    }
-    const flag = config.adminDefault.indexOf(req.body.email);
-    if (flag != -1) {
-        schema.role = 'Admin';
-    }
-    console.log(`[ USER ] service saveUser ${req.body.email} info when first time login`);
-    return mongoDb.saveBySchema(UserModel, schema);
 }
 
 async function deleteUser(req) {
@@ -69,7 +92,10 @@ async function updateUserRole(req) {
 
     console.log('[ USER ] service updateUserRole user: ', req.auth.email);
     let conditions = { _id: req.body.user };
-    let update = { $set: { role: req.body.role, createdDate: Date.now() } };
+    let update = { $set: { 
+        role: req.body.role, 
+        updateDate: Date.now(),
+    } };
     let options = { new: true };
     return mongoDb.findOneAndUpdate(UserModel, conditions, update, options);
 
@@ -132,7 +158,10 @@ async function getUserRoleById(req) {
             console.log('[ USER ] service update user fullName');
             const conditions = { _id: req.auth.email };
             const options = { new: true };
-            const update = { $set: { fullName: req.auth.name } };
+            const update = { $set: { 
+                fullName: req.auth.name,
+                updateDate: Date.now(),
+            } };
             return mongoDb.findOneAndUpdate(UserModel, conditions, update, options);
         }
         return user;
@@ -143,7 +172,8 @@ async function getUserRoleById(req) {
             _id: req.auth.email,
             email: req.auth.email,
             fullName: req.auth.name,
-            createdDate: Date.now()
+            createdDate: Date.now(),
+            updateDate: Date.now(),
         };
         const flag = config.adminDefault.indexOf(req.auth.email);
         if (flag != -1) {
@@ -160,7 +190,7 @@ async function queryUserById(uid){
 
 async function queryAndUpdateUser(email, userName){
     if (!email) {
-        throw{CODE: 4001, MSG: "email must not be empty"};
+        throw MESSAGE.VALIDATION_USER_EMAIL;
     }
     const user = await mongoDb.findById(UserModel, email);
     if (user) {
@@ -185,6 +215,33 @@ async function queryAndUpdateUser(email, userName){
     }
 }
 
+async function saveUserDashboard(req) {
+    const dashboard = req.body.dashboard;
+    const email = req.auth.email;
+    
+    console.log('[ USER ] service saveUserDashboard check user exist: ', email);
+    const user = await mongoDb.findById(UserModel, email);
+    if (!user) {
+        throw MESSAGE.VALIDATION_USER_NO_EXIST;
+    }
+  
+    const now = Date.now();
+    const conditions = {_id: email};
+    const options = {new: true};
+    
+    let update = {
+        $set: {
+            "dashboard.updateDate": now,
+            "dashboard.data": dashboard,
+        }
+    };
+    if (!user.dashboard.createdDate) {
+        update.$set["dashboard.createdDate"] = now;
+    }
+    
+    console.log('[ USER ] service saveUserDashboard update dashboard: ', email);
+    return mongoDb.findOneAndUpdate(UserModel, conditions, update, options);
+}
 
 module.exports = {
     getAllusers,
@@ -197,4 +254,6 @@ module.exports = {
     getUserRoleById,
     queryUserById,
     queryAndUpdateUser,
+    saveUserDashboard,
+    
 }

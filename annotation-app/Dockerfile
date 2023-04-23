@@ -1,10 +1,10 @@
-# Copyright 2019-2021 VMware, Inc.
+# Copyright 2019-2022 VMware, Inc.
 # SPDX-License-Identifier: Apache-2.0
 
 ### STAGE 1: Build ###
 FROM node:16-alpine as builder
-COPY package.json .
-RUN npm i && mkdir /app && cp -R ./node_modules ./app
+COPY package*.json .
+RUN npm config set registry http://registry.npmjs.org/ && npm i && mkdir /app && cp -R ./node_modules ./app
 WORKDIR /app
 COPY . .
 #ARG BUILD_ENV=production

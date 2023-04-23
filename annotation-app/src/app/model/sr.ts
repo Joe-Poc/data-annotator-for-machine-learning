@@ -1,5 +1,5 @@
 /*
-Copyright 2019-2021 VMware, Inc.
+Copyright 2019-2023 VMware, Inc.
 SPDX-License-Identifier: Apache-2.0
 */
 
@@ -18,7 +18,7 @@ export interface SR {
   images?: any;
   userInputsLength?: number;
   fileInfo?: any;
-  ticketQuestions?:any;
+  ticketQuestions?: any;
 }
 export interface UserInput {
   problemCategory: any;

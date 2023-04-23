@@ -11,6 +11,7 @@ const localFileSysService = require('../services/localFileSys.service');
 const request = require('request');
 const S3Utils = require('./s3');
 const { S3OPERATIONS } = require('../config/constant');
+const MESSAGE = require('../config/code_msg')
 
 async function handleFileStream(fileLocation) {
 
@@ -23,11 +24,11 @@ async function handleFileStream(fileLocation) {
   }else if (config.useLocalFileSys && !config.useAWS) {
     
     console.log(`[ FILE_SYSTEM ] Utils localFileSysService.readFileFromLocalSys`);
-    return await localFileSysService.readFileFromLocalSys(fileLocation);
+    return localFileSysService.readFileFromLocalSys(fileLocation);
 
   }else{
 
-    throw {CODE:4007, MSG: "NO VALID FILE SYSTEM"};
+    throw MESSAGE.VALIDATION_FILE_SYS;
   
   }
 

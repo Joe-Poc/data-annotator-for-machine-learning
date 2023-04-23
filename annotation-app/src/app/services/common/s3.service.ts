@@ -1,32 +1,36 @@
 /*
-Copyright 2019-2021 VMware, Inc.
+Copyright 2019-2023 VMware, Inc.
 SPDX-License-Identifier: Apache-2.0
 */
 
 import { Injectable } from '@angular/core';
 import * as _ from 'lodash';
 import AWS from 'aws-sdk/lib/aws';
-import { AvaService } from '../ava.service';
+import { ApiService } from '../api.service';
 import { Buffer } from 'buffer';
-import * as JSZip from 'jszip';
-import { UnZipService } from 'app/services/common/up-zip.service';
+import { UnZipService } from 'src/app/services/common/up-zip.service';
+import { InternalApiService } from '../internal-api.service';
 
 @Injectable()
 export class S3Service {
-  constructor(private avaService: AvaService, private unZipService: UnZipService) {}
+  constructor(
+    private apiService: ApiService,
+    private unZipService: UnZipService,
+    private internalApiService: InternalApiService,
+  ) {}
   public getS3UploadConfig() {
     let response;
     return new Promise<any>((resolve) => {
-      this.avaService.getS3UploadConfig().subscribe(
+      this.internalApiService.getS3UploadConfig().subscribe(
         async (res) => {
           if (res) {
             let outNo = new Date().getTime();
             const s3 = new AWS.S3({
-              region: new Buffer(res.region, 'base64').toString(),
-              apiVersion: new Buffer(res.apiVersion, 'base64').toString(),
-              accessKeyId: new Buffer(res.credentials.accessKeyId, 'base64').toString(),
-              secretAccessKey: new Buffer(res.credentials.secretAccessKey, 'base64').toString(),
-              sessionToken: new Buffer(res.credentials.sessionToken, 'base64').toString(),
+              region: Buffer.from(res.region, 'base64').toString(),
+              apiVersion: Buffer.from(res.apiVersion, 'base64').toString(),
+              accessKeyId: Buffer.from(res.credentials.accessKeyId, 'base64').toString(),
+              secretAccessKey: Buffer.from(res.credentials.secretAccessKey, 'base64').toString(),
+              sessionToken: Buffer.from(res.credentials.sessionToken, 'base64').toString(),
             });
 
             response = {
@@ -53,7 +57,6 @@ export class S3Service {
     return new Promise<any>((resolve) => {
       this.getS3UploadConfig().then(async (e) => {
         if (e.err) {
-          console.log(e.err);
           response = {
             err: e.err,
           };
@@ -61,7 +64,20 @@ export class S3Service {
         } else {
           if (projectType == 'image') {
             if (addMethod == 'zip') {
+              const uploadParams = {
+                Bucket: Buffer.from(e.res.bucket, 'base64').toString(),
+                Key: Buffer.from(e.res.key, 'base64').toString() + '/' + e.outNo + '_' + file.name,
+                Body: file,
+              };
+              const data = await e.s3.upload(uploadParams).promise();
+              response = {
+                err: '',
+                data: data,
+                key: uploadParams.Key,
+                from: '',
+              };
               this.unzipImagesToS3(file, e.res, e.outNo, e.s3).then((e2) => {
+                e2['fileResponse'] = response;
                 resolve(e2);
               });
             } else {
@@ -81,8 +97,8 @@ export class S3Service {
             }
           } else {
             const uploadParams = {
-              Bucket: new Buffer(e.res.bucket, 'base64').toString(),
-              Key: new Buffer(e.res.key, 'base64').toString() + '/' + e.outNo + '_' + file.name,
+              Bucket: Buffer.from(e.res.bucket, 'base64').toString(),
+              Key: Buffer.from(e.res.key, 'base64').toString() + '/' + e.outNo + '_' + file.name,
               Body: file,
             };
             const data = await e.s3.upload(uploadParams).promise();
@@ -107,13 +123,12 @@ export class S3Service {
       let realEntryIndex = 0;
       for (let i = 0; i < entry.length; i++) {
         const uploadParams = {
-          Bucket: new Buffer(s3Config.bucket, 'base64').toString(),
-          Key: new Buffer(s3Config.key, 'base64').toString() + '/' + outNo + '/' + entry[i].name,
+          Bucket: Buffer.from(s3Config.bucket, 'base64').toString(),
+          Key: Buffer.from(s3Config.key, 'base64').toString() + '/' + outNo + '/' + entry[i].name,
           Body: entry[i].file,
         };
         s3.upload(uploadParams, async function (err, data) {
           if (err) {
-            console.log('s3UploadError:::', err);
           }
           if (data) {
             await imagesLocation.push({
@@ -148,8 +163,8 @@ export class S3Service {
             await (value1 as any).async('blob').then(async function (blob) {
               realEntryIndex++;
               const uploadParams = {
-                Bucket: new Buffer(res.bucket, 'base64').toString(),
-                Key: new Buffer(res.key, 'base64').toString() + '/' + outNo + '/' + (value1 as any).name,
+                Bucket: Buffer.from(res.bucket, 'base64').toString(),
+                Key: Buffer.from(res.key, 'base64').toString() + '/' + outNo + '/' + (value1 as any).name,
                 Body: blob,
               };
               uploadEntries.push({
@@ -167,9 +182,6 @@ export class S3Service {
                         .upload(e2.uploadParams)
                         .promise()
                         .then(function (data, err) {
-                          if (err) {
-                            console.log('uploadImageErr:::', err);
-                          }
                           if (data) {
                             imagesLocation.push({
                               fileName: e2.fileName,
@@ -237,7 +249,7 @@ export class S3Service {
   public toCaculateTotalRow(choosedDataset, originalHead, previewContentDatas) {
     let response;
     return new Promise<any>((resolve) => {
-      this.avaService.getCloudUrl(choosedDataset.id).subscribe(
+      this.internalApiService.getCloudUrl(choosedDataset.id).subscribe(
         (res) => {
           this.unZipService
             .parseCSVChunk(res, false, true, choosedDataset.topReview.header, previewContentDatas)
@@ -251,9 +263,7 @@ export class S3Service {
               }
             });
         },
-        (error) => {
-          console.log('Error:', error);
-        },
+        (error) => {},
       );
     });
   }

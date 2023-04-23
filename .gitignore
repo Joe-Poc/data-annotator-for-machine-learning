@@ -1,6 +1,8 @@
 .idea
+.DS_Store
 
 # annotation-app
+annotation-app/.angular
 annotation-app/node_modules
 annotation-app/.npmrc
 annotation-app/chart
